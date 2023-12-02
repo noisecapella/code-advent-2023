@@ -1,5 +1,6 @@
-mod day1;
 mod common;
+mod day1;
+mod day2;
 
 use clap::{ arg, command, value_parser, ArgAction, Command };
 use std::path::Path;
@@ -21,7 +22,11 @@ fn main() {
           1 => day1::part1(file_path),
           2 => day1::part2(file_path),
           _ => panic!("Unknown part {}", part),
-
+      },
+      2 => match part {
+          1 => day2::part1(file_path),
+          2 => day2::part2(file_path),
+          _ => panic!("Unknown part {}", part),
       },
       _ => panic!("unknown day {}", day)
     };
