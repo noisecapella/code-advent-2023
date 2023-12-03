@@ -1,8 +1,9 @@
 mod common;
 mod day1;
 mod day2;
+mod day3;
 
-use clap::{ arg, command, value_parser, ArgAction, Command };
+use clap::{arg, command, value_parser, ArgAction, Command};
 use std::path::Path;
 
 fn main() {
@@ -18,17 +19,22 @@ fn main() {
     println!("Day {}, part {}: ", day, part);
 
     let result: String = match day {
-      1 => match part {
-          1 => day1::part1(file_path),
-          2 => day1::part2(file_path),
-          _ => panic!("Unknown part {}", part),
-      },
-      2 => match part {
-          1 => day2::part1(file_path),
-          2 => day2::part2(file_path),
-          _ => panic!("Unknown part {}", part),
-      },
-      _ => panic!("unknown day {}", day)
+        1 => match part {
+            1 => day1::part1(file_path),
+            2 => day1::part2(file_path),
+            _ => panic!("Unknown part {}", part),
+        },
+        2 => match part {
+            1 => day2::part1(file_path),
+            2 => day2::part2(file_path),
+            _ => panic!("Unknown part {}", part),
+        },
+        3 => match part {
+            1 => day3::part1(file_path),
+            2 => day3::part2(file_path),
+            _ => panic!("Unknown part {}", part),
+        },
+        _ => panic!("unknown day {}", day)
     };
     println!("Result: {}", result);
 }
