@@ -3,7 +3,7 @@ use std::path::Path;
 use crate::common::get_trimmed_lines;
 use crate::day5::Element::Fertilizer;
 
-#[derive(Copy, Clone)]
+#[derive(Debug, Copy, Clone)]
 struct Range {
     source_start: u64,
     dest_start: u64,
@@ -24,6 +24,7 @@ enum Element {
 }
 type MapType = (Element, Element);
 
+#[derive(Debug)]
 struct SeedInfo {
     seeds: Vec<u64>,
     maps: HashMap<MapType, Vec<Range>>,
@@ -88,10 +89,46 @@ fn parse_input(file_path: &Path) -> SeedInfo {
     }
 }
 
+fn translate_number(source_n: u64, source_element: Element, dest_element: Element, seed_info: &SeedInfo) -> u64 {
+    for ((_source_element, _dest_element), ranges) in seed_info.maps.iter() {
+        if *_source_element == source_element {
+            let mut dest_n = source_n;
+            for range in ranges {
+                if source_n >= range.source_start && source_n < range.source_start + (range.len as u64) {
+                    dest_n = range.dest_start + (source_n - range.source_start);
+                    break;
+                }
+            }
+
+            if *_dest_element != dest_element {
+                return translate_number(dest_n, *_dest_element, dest_element, seed_info);
+            } else {
+                return dest_n;
+            }
+        }
+    }
+    panic!("unable to find source element");
+}
+
 pub fn part1(file_path: &Path) -> String {
-    "".to_string()
+    let info = parse_input(file_path);
+
+    let locations: Vec<u64> = info.seeds.iter().map(|seed| {
+        translate_number(*seed, Element::Seed, Element::Location, &info)
+    }).collect();
+    locations.iter().min().unwrap().to_string()
 }
 
 pub fn part2(file_path: &Path) -> String {
-    "".to_string()
+    let info = parse_input(file_path);
+
+    let locations: Vec<u64> = info.seeds.chunks(2).map(|seed_chunk| {
+        let seed_chunk_from = seed_chunk[0];
+        let seed_chunk_len = seed_chunk[1];
+        println!("seed {:?}", seed_chunk);
+        (seed_chunk_from..(seed_chunk_from+seed_chunk_len)).map(|seed| {
+            translate_number(seed, Element::Seed, Element::Location, &info)
+        })
+    }).flatten().collect();
+    locations.iter().min().unwrap().to_string()
 }
