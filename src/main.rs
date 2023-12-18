@@ -8,6 +8,7 @@ mod day6;
 mod day7;
 mod day8;
 mod day9;
+mod day10;
 
 use clap::{arg, command, value_parser, ArgAction, Command};
 use std::path::Path;
@@ -68,6 +69,11 @@ fn main() {
         9 => match part {
             1 => day9::part1(file_path),
             2 => day9::part2(file_path),
+            _ => panic!("Unknown part {}", part),
+        },
+        10 => match part {
+            1 => day10::part1(file_path),
+            2 => day10::part2(file_path),
             _ => panic!("Unknown part {}", part),
         },
         _ => panic!("unknown day {}", day)
